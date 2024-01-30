@@ -23,30 +23,26 @@ plt.show()
 mean = 0
 standDiv = 1
 
-points = np.random.normal(mean, standDiv, 1000)
-xmin = min(points)
-xmax = max(points)
 
-plt.hist(points, bins=50, density=True, alpha=0.6, color='g')
 
-x = np.linspace(xmin, xmax, 100)
+gaussianFunc = np.exp(-(x_values - mean)**2 / (2 * standDiv**2)) / (standDiv * np.sqrt(2 * np.pi))
 
-gaussianFunc = np.exp(-(x - mean)**2 / (2 * standDiv**2)) / (standDiv * np.sqrt(2 * np.pi))
-
-plt.plot(x, gaussianFunc, 'k', linewidth=2)
+plt.plot(x_values, gaussianFunc, 'k', linewidth=2)
 plt.show()
-print(xmin, xmax)
+
 
 
 
 # Convolve the Step function and the Gaussian Function and plot the convolved function
 
-convolveFunc = np.convolve(gaussianFunc, y_value, mode='full')
+convolveFunc = np.convolve(gaussianFunc, y_value, mode='same')
 
 plt.figure(figsize=(10,10))
 
+
+
 plt.plot()
-plt.stem(convolveFunc)
+plt.plot(x_values, convolveFunc, linewidth = 2)
 plt.title('Convolution Result')
 
 plt.show()
