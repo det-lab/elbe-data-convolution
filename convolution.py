@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import os 
+
 
 def step_function(x):
     if -6<= x < 6:
