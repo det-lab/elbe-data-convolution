@@ -43,20 +43,33 @@ def sigma(neutronEnergy):
     #returns a sigma value for an input of the neutron energy where tof is related to the energy as well
     return neutronEnergy * 2 * np.sqrt(((dfPath/fPath)**2) + (((dTof/tof))**2))
 
-#inprogress func
-def centerPointFunc():
-    x_values = np.linspace()
 
 #list of sigma values
 #sigmaList = sigma(neutronEnergy.iat[2,0])
-sigmaList = neutronEnergy.apply(sigma)
+sigmaDataFrame = neutronEnergy.apply(sigma)
+sigmaList = sigmaDataFrame["Lab Frame Energy"].tolist()
 print("This is sigma List", sigmaList)
+neutronEnergyList = neutronEnergy["Lab Frame Energy"].tolist()
+print("this is Neutron Energy List", neutronEnergyList)
 
-print("sigma Pick at 2", sigmaList.iat[2,0])
+for i in range(len(sigmaList)):
+    pointer = sigmaList[i]
+
+    x_value = np.linspace(neutronEnergyList[i] - 0.01, neutronEnergyList[i] + 0.01, 200)
+    gaussianFuncProto = np.exp(((x_value - neutronEnergyList[i])**2)/(pointer**2) / (-2)) / (pointer * np.sqrt(2 * np.pi))
+    plt.plot(x_value, gaussianFuncProto)
+    print(x_value - neutronEnergyList[i])
+    print(2 * (pointer**2))
+    #print("gaussian Max Value at", i, np.exp(((x_value - neutronEnergyList[i])**2)/(pointer**2) / (-2)))
+
+plt.show()
+
+
+print("sigma Pick at 2", sigmaList[2])
 x_values = np.linspace(0.08, .11, 1000)
 #y axis as a gaussian function
 gaussianFunc = np.exp(-(x_values - neutronEnergy.iat[2,0])**2 / (2 * sigmaList.iat[2,0]**2)) / (sigmaList.iat[2,0] * np.sqrt(2 * np.pi))
-# e^(-MeV^2 / 2* MeV ^ 2) / (Mev * sqrt(2pi))
+# expression of the gaussianFunc = e^(-MeV^2 / 2* MeV ^ 2) / (Mev * sqrt(2pi))
 print("this is gaussian values", gaussianFunc[50])
 
 
