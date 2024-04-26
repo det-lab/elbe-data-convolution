@@ -54,6 +54,7 @@ d = dopplerDivList
 
 #Creates a list of y values where the shift is zero
 y_value = [np.exp((-( 0 )**2 / (d**2))/(2)) / (d * np.sqrt(2 * np.pi)) for n, d in zip(neutronEnergyList,dopplerDivList)]
+
     
 plt.plot(neutronEnergyList, y_value)
 plt.show()

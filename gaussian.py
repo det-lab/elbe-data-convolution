@@ -85,26 +85,73 @@ userNeutronEnergy = int(userNeutronEnergy)
 
 # rewrite so calculates guassian points at neutron energy values instead of around user inputs
 
-#x_value = np.linspace(neutronEnergyList[userNeutronEnergy] - 0.01, neutronEnergyList[userNeutronEnergy] + 0.01, 26)
+x_value = np.linspace(neutronEnergyList[userNeutronEnergy] - 0.01, neutronEnergyList[userNeutronEnergy] + 0.01, 28)
 
 sigmaValue = sigmaList[userNeutronEnergy]
-print(neutronEnergyList[userNeutronEnergy])
-gaussianFuncProto = np.exp((((0)**2))/(sigmaValue**2) / (-2)) / (sigmaValue * np.sqrt(2 * np.pi)) * 1E-4
+
+stepSize = x_value[1]-x_value[0]
+
+
+mean = np.mean(neutronEnergyList)
+
+#print(x_value)
+gaussianFuncProto = np.exp((((mean - neutronEnergyList)**2))/(sigmaValue**2) / (-2)) / (sigmaValue * np.sqrt(2 * np.pi)) 
 
 experemntValuesList = experemntValues["Experimental data"].tolist()
 
-print(gaussianFuncProto)
+#print(gaussianFuncProto)
 
-convovled = np.convolve(theoryValuesList , gaussianFuncProto , mode="same")
+#interpolation of gaussian#
+
+interpEnergy = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 10)
+
+#newGaussian = np.interp(interpEnergy, neutronEnergyList, gaussianFuncProto)
+
+print(np.size(neutronEnergyList))
+print(np.size(theoryValuesList))
+
+mean = np.mean(interpEnergy)
+
+
+# changed from min of the sigma list to calculating new sigmas for every energy of interp, might be what we are looking for
+
+
+
+newGaussian = np.exp((((mean - interpEnergy)**2))/(sigma(interpEnergy)**2) / (-2)) / (sigma(interpEnergy) * np.sqrt(2 * np.pi)) 
+
+interpTheory = np.interp(interpEnergy, neutronEnergyList, theoryValuesList) 
+
+areaUnderGaus = sum(newGaussian) * (interpEnergy[2] - interpEnergy[1])
+
+print("Area Under Gauss:", areaUnderGaus)
+
+#non_zero_indices = [index for index, num in enumerate(newGaussian) if num != 0]
+#energyInterval = interpEnergy[non_zero_indices]
+
+plt.plot(neutronEnergyList, gaussianFuncProto, color="red")
+plt.plot(interpEnergy, newGaussian, color = "blue")
+plt.show()
+
+#gaussianReso = newGaussian[non_zero_indices]
+
+stepSize = interpEnergy[2] - interpEnergy[1]
+
+print("Step Size of Interp:", stepSize)
+
+convovled = np.convolve(interpTheory , newGaussian , mode="same") * stepSize / areaUnderGaus
 
 print(convovled)
 
-plt.plot(neutronEnergyList, theoryValuesList, color = "orange")
-#plt.errorbar(neutronEnergyList, experemntValuesList, yerr = uncertaintyList, fmt="o",capsize = 5, color = "red")
-
-plt.plot(neutronEnergyList, convovled, color="blue")
+#plt.plot(neutronEnergyList, theoryValuesList, color = "orange")
+##plt.errorbar(neutronEnergyList, experemntValuesList, yerr = uncertaintyList, fmt="o",capsize = 5, color = "red")
+#
+#plt.plot(neutronEnergyList, convovled, color="blue")
 plt.xlabel("Neutron Energy MeV")
 
+plt.plot(interpEnergy, interpTheory, color = "black")
+
+plt.plot(interpEnergy, convovled, color = "red")
+plt.grid()
 plt.show()
 
 
@@ -132,3 +179,8 @@ plt.show()
 ##print(totalEngergy.sort_values(by="Lab Frame Energy"))
 ##print(negNeutronEnergy)
 ##print(neutronEnergy)
+
+
+
+# things for this week
+# interpolate 
