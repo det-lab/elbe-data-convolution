@@ -3,19 +3,46 @@ import matplotlib.pyplot as plt
 from numba import jit
 
 preList1 = np.linspace(5,10,12)  # Test numbers before but now can be scaled [1,2,3,4,5]
-preList2 = np.linspace(0,10,12)  # Test numbers before but now can be scaled [5,4,3,2,1]
-list1 = np.pad(preList1, len(preList2)-1, mode= "constant", constant_values=0)
+
+
+
+resolutionList = np.linspace(0,10,13)  # Test numbers before but now can be scaled [5,4,3,2,1]
+list1 = np.pad(preList1, len(resolutionList)-1, mode= "constant", constant_values=0)
+
+
+
+#Creates new 2d array with lists that can be convolved with their index
+dataArray = []
+nonPad = []
+for i in range(1,11):
+    
+    preList = np.linspace(2 * i, 4 * i, 13)
+    nonPad.append(preList)
+
+    preList = np.pad(preList, len(resolutionList)-1, mode= "constant", constant_values=0)
+    preList = np.array(preList)
+    
+    dataArray.append(preList)
+
+
+
+
+
+
+
+
+
 
 
 list1 = np.array(list1)
-list2 = np.array(preList2)
+list2 = np.array(resolutionList)
 
 @jit(nopython = True)
 def convolv(list1, list2):
     
     rArray = []
     #Minus 1 in the inital value due to an even/odd relation for deviding the lengths by two 
-    for i in range(int(len(list1)/2)-1 ,len(list1)- ((len(preList2)-1)/2)):
+    for i in range(int(len(list1)/2) ,len(list1)- ((len(resolutionList)-1)/2)-1):
         
         r = 0
 
@@ -56,24 +83,46 @@ def cleanEdges(arry):
 rawArry = convolv(list1,list2)
 cleanArry = cleanEdges(rawArry)
 
-convovleTestArry = np.convolve(preList1,preList2,mode="same")
+convovleTestArry = np.convolve(preList1,resolutionList,mode="same")
 cleanConTestArry = cleanEdges(convovleTestArry)
 
-print("Length of Convolution testing array", len(cleanConTestArry),"\n", "Length of data array", len(cleanArry))
+#print("Length of Convolution testing array", len(cleanConTestArry),"\n", "Length of data array", len(cleanArry))
 
-print(cleanConTestArry,"\n", cleanArry)
+#print(cleanConTestArry,"\n", cleanArry)
+
+def testingConv(cleanArry,cleanConTestArry):
+    for i in range(len(cleanArry)):
+        if np.round(cleanArry[i],decimals=3) != np.round(cleanConTestArry[i],decimals=3):
+
+            print("### cleanArry and cleanConTestArry are not equal at", i, "###")
+            print("### cleanArry =", cleanArry[i], "cleanConTestArry =", cleanConTestArry[i], "###","\n")
+            break
+        elif len(cleanArry) != len(cleanConTestArry):
+            print("### Arrays are not the same dimention ###")
+            print("### Test Array length:", len(cleanConTestArry),"\n", "### Data Array Length:", len(cleanArry))
+            break
+
+print(dataArray[1])
+print(convolv(dataArray[1],resolutionList))
 
 
-for i in range(len(cleanArry)):
-    if np.round(cleanArry[i],decimals=3) != np.round(cleanConTestArry[i],decimals=3):
-        
-        print("### cleanArry and cleanConTestArry are not equal at", i, "###")
-        print("### cleanArry =", cleanArry[i], "cleanConTestArry =", cleanConTestArry[i], "###","\n")
-        break
-    elif len(cleanArry) != len(cleanConTestArry):
-        print("### Arrays are not the same dimention ###")
-        print(len(cleanConTestArry),"\n", len(cleanArry))
-        break
+### Below is for new multi data lists ###
+for i in range(len(dataArray)):
+    
+
+    convovleTestArry = np.convolve(nonPad[i],resolutionList,mode="same")
+    cleanConTestArry = cleanEdges(convovleTestArry)
+
+    testingConv(convolv(dataArray[i],resolutionList), cleanConTestArry)
+
+    print(convolv(dataArray[i],resolutionList), "\n", cleanConTestArry)
+
+
+
+
+
+
+
 
 
 
