@@ -16,12 +16,15 @@ dataArray = []
 nonPad = []
 for i in range(1,11):
     
+    #creates an list with set values scaled by i
     preList = np.linspace(2 * i, 4 * i, 13)
     nonPad.append(preList)
 
+    #pads the list which is needed to preform the convolution
     preList = np.pad(preList, len(resolutionList)-1, mode= "constant", constant_values=0)
     preList = np.array(preList)
     
+    #appends the list to a 2d array
     dataArray.append(preList)
 
 
@@ -34,8 +37,8 @@ for i in range(1,11):
 
 
 
-list1 = np.array(list1)
-list2 = np.array(resolutionList)
+list1 = np.array(list1) #Thoery
+list2 = np.array(resolutionList) #Resolution or Gaussian
 
 @jit(nopython = True)
 def convolv(list1, list2):
