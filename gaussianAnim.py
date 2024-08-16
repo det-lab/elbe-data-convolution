@@ -93,8 +93,6 @@ for energy in uniformNeutronEnergyList:
 
 matrixGaussian = np.array(matrixGaussian)
 
-
-
 #picks a specific gaussian array from the 2d matrix
 currentArray = matrixGaussian[4000]
 
@@ -102,7 +100,7 @@ currentArray = matrixGaussian[4000]
 #newCurrentArray = [newCurrentArray for newCurrentArray in currentArray if newCurrentArray != 0]
 
 #uses the convolv function in newApproach.py to caluculate the points at a specifc index for the 2d gaussian matrix
-plotPoint = na.convolution_1d_same(interpTheory, currentArray, uniformNeutronEnergyList) 
+plotPoint = na.convolution_2d_changing_kernel(interpTheory, matrixGaussian, uniformNeutronEnergyList) 
 
 #troubleshooting
 
@@ -184,9 +182,14 @@ def NormPlot():
 fig, ax = plt.subplots()
 x = neutronEnergyList
 energy = neutronEnergyList[0]
-line, = ax.plot(x, gaussian(energy, neutronEnergyList), color = "red")
+line, = ax.plot(x, gaussian(energy, neutronEnergyList), color = "white")
 ax.plot(neutronEnergyList, theoryValuesList, color = "blue")
+ax.plot(uniformNeutronEnergyList, na.convolution_1d_same(interpTheory, matrixGaussian[200],  uniformNeutronEnergyList), color="red")
+ax.plot(uniformNeutronEnergyList, na.convolution_1d_same(interpTheory, matrixGaussian[850], uniformNeutronEnergyList), color="orange")
+
+ax.plot(uniformNeutronEnergyList, na.convolution_1d_same(interpTheory, matrixGaussian[1500], uniformNeutronEnergyList), color="lawngreen")
 ax.plot(uniformNeutronEnergyList, plotPoint, color = "black")
+
 #ax.plot(uniformNeutronEnergyList, interpTheory, color = "green")
 
 #ax.plot(x, np.linspace(2000,2000, len(x)), color = "blue")
@@ -226,6 +229,8 @@ fig.canvas.mpl_connect('key_press_event', on_key_press)
 
 # Show the animation
 plt.show()
+
+
 
 ###Old Code Ignore for now###
 
