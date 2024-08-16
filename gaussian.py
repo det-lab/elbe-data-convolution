@@ -103,7 +103,7 @@ experemntValuesList = experemntValues["Experimental data"].tolist()
 
 #interpolation of gaussian#
 
-interpEnergy = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 10)
+interpEnergy = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 20)
 
 #newGaussian = np.interp(interpEnergy, neutronEnergyList, gaussianFuncProto)
 
@@ -112,10 +112,7 @@ print(np.size(theoryValuesList))
 
 mean = np.mean(interpEnergy)
 
-
-# changed from min of the sigma list to calculating new sigmas for every energy of interp, might be what we are looking for
-
-
+# changed from min of the sigma list to calculating new sigmas for every energy of interp
 
 newGaussian = np.exp((((mean - interpEnergy)**2))/(sigma(interpEnergy)**2) / (-2)) / (sigma(interpEnergy) * np.sqrt(2 * np.pi)) 
 
@@ -128,8 +125,8 @@ print("Area Under Gauss:", areaUnderGaus)
 #non_zero_indices = [index for index, num in enumerate(newGaussian) if num != 0]
 #energyInterval = interpEnergy[non_zero_indices]
 
-plt.plot(neutronEnergyList, gaussianFuncProto, color="red")
-plt.plot(interpEnergy, newGaussian, color = "blue")
+plt.plot(neutronEnergyList, gaussianFuncProto, color="black")
+plt.plot(interpEnergy, newGaussian, color = "red")
 plt.show()
 
 #gaussianReso = newGaussian[non_zero_indices]
@@ -148,9 +145,9 @@ print(convovled)
 #plt.plot(neutronEnergyList, convovled, color="blue")
 plt.xlabel("Neutron Energy MeV")
 
-plt.plot(interpEnergy, interpTheory, color = "black")
+plt.plot(interpEnergy, interpTheory, color = "blue")
 
-plt.plot(interpEnergy, convovled, color = "red")
+plt.plot(interpEnergy, convovled, color = "black")
 plt.grid()
 plt.show()
 

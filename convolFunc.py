@@ -7,7 +7,7 @@ preList1 = np.linspace(5,10,12)  # Test numbers before but now can be scaled [1,
 
 
 resolutionList = np.linspace(0,10,13)  # Test numbers before but now can be scaled [5,4,3,2,1]
-list1 = np.pad(preList1, len(resolutionList)-1, mode= "constant", constant_values=0)
+
 
 
 
@@ -37,15 +37,30 @@ for i in range(1,11):
 
 
 
-list1 = np.array(list1) #Thoery
-list2 = np.array(resolutionList) #Resolution or Gaussian
 
-@jit(nopython = True)
-def convolv(list1, list2):
+
+#@jit(nopython = True)
+#function to perform convolution
+#args of the function are theory values and 2d matrix of gaussians
+def convolv(inputList1, list2):
+
+    #check if dimensions of data to ensure same dimension
+    if len(inputList1) != len(list2):
+        return print("Wrong Dimentions for list 1 and list 2")
+
+    #pads the data list with zeros in the beggining of the array and the end by a length of the resolution function - 1
+    list1 = np.pad(inputList1, len(list2)-1, mode= "constant", constant_values=0)
     
+    #ensures the lists are in numpy arrays
+    list1 = np.array(list1) #Thoery
+    list2 = np.array(list2) #Resolution or Gaussian
+
     rArray = []
-    #Minus 1 in the inital value due to an even/odd relation for deviding the lengths by two 
-    for i in range(int(len(list1)/2) ,len(list1)- ((len(resolutionList)-1)/2)-1):
+    
+    #for loop that performs the convolution
+    #Minus 1 in the inital value due to an even/odd relation for deviding the lengths by two
+    # copy of how original "same" conv indexing ##int(len(list1)/2) ,int(len(list1)- ((len(list2))/2)-1##
+    for i in range(0,len(list1)):
         
         r = 0
 
@@ -60,10 +75,26 @@ def convolv(list1, list2):
 
         rArray.append(r)
     
-    return rArray
+    ### Method for cleaning the edges of extra zeros of the new plot points###
+    startIdx = 0
+    endIdx= len(rArray)
+
+    for i in range(len(rArray)):
+        if rArray[i] != 0:
+            startIdx= i
+            break
+
+    for i in range(len(rArray) - 1, -1, -1):        
+        if rArray[i] !=0:
+            endIdx = i
+            break
+        
+    
+    
+    return rArray[startIdx:endIdx+1]
 
 # keep np.dot in mind
-
+"""
 x1_Value = np.linspace(-10,10,21) # n in y(n) convolve h(n)
 
 def cleanEdges(arry):
@@ -83,8 +114,8 @@ def cleanEdges(arry):
     
     return arry[startIdx:endIdx]
 
-rawArry = convolv(list1,list2)
-cleanArry = cleanEdges(rawArry)
+#rawArry = convolv(list1,list2)
+#cleanArry = cleanEdges(rawArry)
 
 convovleTestArry = np.convolve(preList1,resolutionList,mode="same")
 cleanConTestArry = cleanEdges(convovleTestArry)
@@ -175,3 +206,4 @@ for i in range(len(dataArray)):
 #plt.plot(x1_Value,hFunc(x1_Value))
 #plt.show()
 
+"""
