@@ -2,13 +2,18 @@ import numpy as np
 import newApproach as na
 import gaussianAnim as ga
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
+
+
+fig = plt.figure(layout="constrained")
+
 
 x = ga.uniformNeutronEnergyList
 
 # Parameters for the Gaussian comb
 A = 20        # Amplitude
 d = 1      # Distance between peaks
-sigmaDiv = 0.1 # Standard deviation (width) of each Gaussian
+sigmaDiv = 0.05 # Standard deviation (width) of each Gaussian
 N = 2000       # Number of terms in the summation on each side of the center
 
 
@@ -21,19 +26,48 @@ def combGaussian(xAxis, amp, distance, sigma, num):
         F_x += amp * np.exp(-((xAxis - i * distance)**2) / (2 * sigma**2))
     return(F_x)
 
-controlPlot = np.array(combGaussian(x, 20, 0.5, 0.1, 200))
+controlPlot = np.array(combGaussian(x, 20, 1, 0.01, 200))
 
 testPlot = na.convolution_2d_changing_kernel(controlPlot, ga.matrixGaussian, x)
+#testPlot2 = na.convolution_2d_changing_kernel(combGaussian(x, 20,0.5, 0.005, 200), ga.matrixGaussian, x)
 
 
+gs = GridSpec(2,2, figure = fig)
+ax1 = fig.add_subplot(gs[0,0:])
+ax2 = fig.add_subplot(gs[1,0])
+ax3 = fig.add_subplot(gs[1,1])
 
+ax1.plot(x, controlPlot, label='Repeating Gaussian Comb', color = 'lightblue', linewidth = 3)
+ax1.plot(x, testPlot, label='Convolved Gaussian Comb', color = "indigo")
+
+ax2.plot(x, controlPlot, label='Repeating Gaussian Comb', color = 'lightblue', linewidth = 3)
+ax2.plot(x, testPlot, label='Convolved Gaussian Comb', color = "indigo")
+ax2.set_xlim(0.8,1.2)
+
+ax3.plot(x, controlPlot, label='Repeating Gaussian Comb', color = 'lightblue', linewidth = 3)
+ax3.plot(x, testPlot, label='Convolved Gaussian Comb', color = "indigo")
+ax3.set_xlim(10.8,11.2)
+
+fig.suptitle("GridSpec")
+
+plt.show()
+
+"""
 # Plotting the result
 plt.figure(figsize=(10, 6))
-plt.plot(x, controlPlot, label='Repeating Gaussian Comb', color = 'blue')
-plt.plot(x, testPlot, label='Convolved Gaussian Comb', color = "black")
+plt.subplot(x, controlPlot, label='Repeating Gaussian Comb', color = 'lightblue', linewidth = 3)
+plt.subplot(x, testPlot, label='Convolved Gaussian Comb', color = "indigo")
+
+plt.subplot(x, controlPlot, label='Repeating Gaussian Comb', color = 'lightblue', linewidth = 3)
+plt.subplot(x, testPlot, label='Convolved Gaussian Comb', color = "indigo")
+
+plt.subplot(x, controlPlot, label='Repeating Gaussian Comb', color = 'lightblue', linewidth = 3)
+plt.plot(x, testPlot, label='Convolved Gaussian Comb', color = "indigo")
+#plt.plot(x, testPlot2, label='Convolved small sig Gaussian Comb', color = "red")
 plt.title('Repeating Gaussian Comb')
 plt.xlabel('x')
 plt.ylabel('F(x)')
-plt.grid(True)
+plt.grid(False)
 plt.legend()
 plt.show()
+"""
