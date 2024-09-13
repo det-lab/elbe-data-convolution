@@ -182,7 +182,7 @@ def NormPlot():
 fig, ax = plt.subplots()
 x = neutronEnergyList
 energy = neutronEnergyList[0]
-line, = ax.plot(x, gaussian(energy, neutronEnergyList), color = "white")
+line, = ax.plot(x, gaussian(energy, neutronEnergyList), color = "pink")
 ax.plot(neutronEnergyList, theoryValuesList, color = "blue")
 ax.plot(uniformNeutronEnergyList, na.convolution_1d_same(interpTheory, matrixGaussian[200],  uniformNeutronEnergyList), color="red")
 ax.plot(uniformNeutronEnergyList, na.convolution_1d_same(interpTheory, matrixGaussian[850], uniformNeutronEnergyList), color="orange")

@@ -41,8 +41,9 @@ def convolution_2d_changing_kernel(signal, rawKernel, neutronEnergyList):
     energyStepsList = np.diff(neutronEnergyList)
     energyStep = energyStepsList[1]
 
+    # Dot product of the signal and kernel, the kernel is already moving along the signal with the 2d raw kernel
     for i, kernel in enumerate(rawKernel):
-
+        
         output[i] = np.dot(signal, kernel) * energyStep
         #takes the sum of the padded_signal with its length equal to that of the kernels
         
