@@ -18,7 +18,7 @@ print("reading file... " + file_path)
 print("Computating Convolution")
 
 neutronEnergy = pd.read_excel(file_path, usecols="E", header=0)
-
+print(neutronEnergy)
 theoryValues = pd.read_excel(file_path,usecols="B", header=0)
 experemntValues = pd.read_excel(file_path,usecols="C", header=0)
 uncertainty = pd.read_excel(file_path,usecols="D", header=0)

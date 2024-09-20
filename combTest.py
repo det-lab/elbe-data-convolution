@@ -1,5 +1,5 @@
 import numpy as np
-import newApproach as na
+import primaryConvolve as na
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import dataPull as dataP
