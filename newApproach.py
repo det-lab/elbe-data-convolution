@@ -1,5 +1,9 @@
 import numpy as np
 
+
+#Convolution of two 1d arrays
+#[0,0,1,1,0,0]
+#[2,3,4,2,5,3]
 def convolution_1d_same(signal, rawKernel, neutronEnergyList):
     
     kernel = [kernel for kernel in rawKernel if kernel != 0]
@@ -32,6 +36,10 @@ def convolution_1d_same(signal, rawKernel, neutronEnergyList):
     
     return output
 
+
+#convolution of 2d kernal array and signal
+#{[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]}
+#[2,3,4,2]
 def convolution_2d_changing_kernel(signal, rawKernel, neutronEnergyList):
 
      # Initialize the output array
@@ -50,36 +58,3 @@ def convolution_2d_changing_kernel(signal, rawKernel, neutronEnergyList):
     print(output)
     return output
 
-x = np.linspace(0, 200, 200)
-y = np.linspace(0,10, 20)
-
-diff = np.linspace(0,2, 2000)
-
-#L1 = np.linspace(25,50,25)
-#L2 = np.linspace(1,10,10)
-#
-#
-#rArray = []
-#
-#def dataLoop():
-#    
-#    for i in range(1,len(L1)):
-#        #print("I index is: ", i)
-#        r = 0
-#        for j in range(1,len(L2)):
-#            
-#            if (i-j) < 0:
-#                
-#                break
-#            else: 
-#                r += L1[i-j] * L2[-j]
-#
-#        rArray.append(r)
-#
-#    return rArray
-#
-#print(dataLoop())
-#
-#print(np.convolve(L2,L1, mode="full"))
-#print(len(dataLoop()))
-#print(len(np.convolve(L2,L1, mode="full")))

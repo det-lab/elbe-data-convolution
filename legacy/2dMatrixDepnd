@@ -1,0 +1,100 @@
+import numpy as np
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from numba import jit
+
+#this program is usefull for conceptualizing how the gaussian is changing with energy
+#keep in mind the values that are greater than zero are used in the convolution with the theory data
+
+
+folder = 'data'
+
+filename = 'LabFrameEnergyData.xlsx'
+
+# Build the path
+
+file_path = os.path.join(folder, filename)
+
+# Print the path
+
+print("reading file... " + file_path)
+
+neutronEnergy = pd.read_excel(file_path, usecols="E", header=0)
+
+theoryValues = pd.read_excel(file_path,usecols="B", header=0)
+experemntValues = pd.read_excel(file_path,usecols="C", header=0)
+uncertainty = pd.read_excel(file_path,usecols="D", header=0)
+
+
+#Function that calculates the diviation for the gaussian function
+def sigma(neutronEnergy):
+    #mass = ((1.674 * 10 ** -27) * (1/(1.6*10**-19)) * (10**-6)) / ((2.98*10**8)**2)#mass energy in MeV
+
+    mass = 939.5654133 #/ (299792458) ** 2 # MeV per C^2 = mass
+
+    #print("this is mass" , mass)
+    dfPath = 0.349 * 10 ** -2 #cm to m
+
+    fPath = 867.75 * 10 ** -2 #cm to m
+
+    dTof = 0.2007  * (10 ** (-9)) #nanoseconds to seconds
+    #print("This is neutron energy",neutronEnergy)
+    # tof calculated with sqrt(mass/2Eng)*fpath
+    tof = np.sqrt((mass)/(2*(neutronEnergy)))*fPath / (299792458) #Speed of light
+    # sqrt((mev/c^2)/mev)*m = m/c = m/(m/s)
+    #print("this is tof", tof)
+    #returns a sigma value for an input of the neutron energy where tof is related to the energy as well
+    return neutronEnergy * 2 * np.sqrt(((dfPath/fPath)**2) + (((dTof/tof))**2))
+
+
+#list of sigma values
+sigmaDataFrame = neutronEnergy.apply(sigma)
+sigmaList = sigmaDataFrame["Lab Frame Energy"].tolist()
+
+neutronEnergyList = neutronEnergy["Lab Frame Energy"].tolist()
+
+theoryValuesList = theoryValues["Theory function"].tolist()
+
+neutronEnergyList = np.array(neutronEnergyList)
+
+
+# changed from min of the sigma list to calculating new sigmas for every energy of interp, might be what we are looking for
+def gaussian(index):
+    newGaussian = np.exp((((neutronEnergyList[index]- neutronEnergyList)**2))/(sigma(neutronEnergyList[index])**2) / (-2)) / (sigma(neutronEnergyList[index]) * np.sqrt(2 * np.pi)) 
+    return newGaussian
+
+#function that calculates the 2d matrix of all gaussian functions
+matrixGaussian = []
+for i in range(len(neutronEnergyList)):
+    matrixGaussian.append(gaussian(i))
+    if i == range(len(neutronEnergyList)):
+        print("Finished calculating gaussian matrix")
+
+np.pad(theoryValuesList, len(matrixGaussian[0])-1, mode= "constant", constant_values=0)
+
+@jit(nopython = True)
+def convolv(theoryData, resolutionMatrix):
+    print(range(int(len(theoryData)/2) ,len(theoryData)- ((len(resolutionMatrix)-1)/2)-1))
+    rArray = []
+    #Minus 1 in the inital value due to an even/odd relation for deviding the lengths by two 
+    for i in range(int(len(theoryData)/2) ,len(theoryData)- ((len(resolutionMatrix)-1)/2)-1):
+        
+        r = 0
+        resolutionList = resolutionMatrix[i]
+        for j in range(len(theoryData)):
+            
+            if (i-j) < 0:
+                break
+            elif (j>= len(resolutionList)) or ((i-j)>= len(theoryData)):
+                break
+            elif (resolutionList[j] != 0 and theoryData[i-j] != 0):
+                r += resolutionList[j] * theoryData[i-j]
+
+        rArray.append(r)
+    
+    return rArray
+
+for i in range(len(matrixGaussian)):
+    convolv(theoryValues, matrixGaussian[i])
