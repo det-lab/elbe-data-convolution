@@ -28,17 +28,6 @@ for i in range(1,11):
     dataArray.append(preList)
 
 
-
-
-
-
-
-
-
-
-
-
-
 #@jit(nopython = True)
 #function to perform convolution
 #args of the function are theory values and 2d matrix of gaussians

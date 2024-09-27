@@ -17,21 +17,24 @@ file_path = os.path.join(folder, filename)
 print("reading file... " + file_path)
 print("Computating Convolution")
 
+#imports all of the excel data into pandas arrays
 neutronEnergy = pd.read_excel(file_path, usecols="E", header=0)
 print(neutronEnergy)
 theoryValues = pd.read_excel(file_path,usecols="B", header=0)
-experemntValues = pd.read_excel(file_path,usecols="C", header=0)
+expereimentValues = pd.read_excel(file_path,usecols="C", header=0)
 uncertainty = pd.read_excel(file_path,usecols="D", header=0)
 
+#converts pandas arrays into lists for ease of use
 neutronEnergyList = neutronEnergy["Lab Frame Energy"].tolist()
-
 theoryValuesList = theoryValues["Theory function"].tolist()
-
+expereimentValuesList = expereimentValues["Experimental data"].tolist()
 neutronEnergyList = np.array(neutronEnergyList)
 
+#creates a new uniform list of energy values 
 uniformNeutronEnergyList = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 2)
 
 interpTheory = np.interp(uniformNeutronEnergyList, neutronEnergyList, theoryValuesList)
+interpExperiment = np.interp(uniformNeutronEnergyList, neutronEnergyList, expereimentValuesList)
 
 #Function that calculates the diviation for the gaussian function
 def sigma(neutronEnergy):

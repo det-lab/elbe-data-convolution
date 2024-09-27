@@ -7,26 +7,30 @@ import primaryConvolve as na
 #keep in mind the values that are greater than zero are used in the convolution with the theory data
 
 ###Imports the variables from dataPull.py
-experemntValues = dataP.experemntValues
+expereimentValues = dataP.expereimentValues
 uncertainty = dataP.uncertainty
 neutronEnergyList = dataP.neutronEnergyList
 theoryValuesList = dataP.theoryValuesList
 neutronEnergyList = np.array(neutronEnergyList)
 #creates a uniform energy axis inorder to ensure gaussian is normalized
 uniformNeutronEnergyList = dataP.uniformNeutronEnergyList
-interpTheory = np.interp(uniformNeutronEnergyList, neutronEnergyList, theoryValuesList) 
+interpTheory = dataP.interpTheory
+interpExperimental = dataP.interpExperiment
 #imports the 2d Gaussian matrix from dataPull.py
 matrixGaussian = dataP.matrixGaussian
 ###
 
 #uses the convolv function in newApproach.py to caluculate the points at a specifc index for the 2d gaussian matrix
-plotPoint = na.convolution_2d_changing_kernel(interpTheory, matrixGaussian, uniformNeutronEnergyList) 
+theoryPlotPoints = na.convolution_2d_changing_kernel(interpTheory, matrixGaussian, uniformNeutronEnergyList) 
+expereimentPlotPoints = na.convolution_2d_changing_kernel(interpExperimental, matrixGaussian, uniformNeutronEnergyList)
 
 # Set up the figure, axis, and plot element
 fig, ax = plt.subplots()
 x = neutronEnergyList
 line, = ax.plot(uniformNeutronEnergyList, interpTheory, color = "blue")
-ax.plot(uniformNeutronEnergyList, plotPoint, color = "black")
+ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black")
+ax.plot(uniformNeutronEnergyList, interpExperimental, color ="red")
+ax.plot(uniformNeutronEnergyList, expereimentPlotPoints, color= "green")
 
 ax.set_yscale('linear')
 
