@@ -27,9 +27,13 @@ expereimentPlotPoints = na.convolution_2d_changing_kernel(interpExperimental, ma
 # Set up the figure, axis, and plot element
 fig, ax = plt.subplots()
 x = neutronEnergyList
+# plots the theory values from the excel doc
 line, = ax.plot(uniformNeutronEnergyList, interpTheory, color = "blue")
+# plots the theory values convolved with the gaussian matrix
 ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black")
+#plots the interped experimental data
 ax.plot(uniformNeutronEnergyList, interpExperimental, color ="red")
+#plots the experimental data convolved with the gaussian matrix
 ax.plot(uniformNeutronEnergyList, expereimentPlotPoints, color= "green")
 
 ax.set_yscale('linear')

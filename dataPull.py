@@ -48,29 +48,34 @@ def sigma(neutronEnergy):
     fPath = 867.75 * 10 ** -2 #cm to m
 
     dTof = 0.2007  * (10 ** (-9)) #nanoseconds to seconds
-    #print("This is neutron energy",neutronEnergy)
+    
     # tof calculated with sqrt(mass/2Eng)*fpath
     tof = np.sqrt((mass)/(2*(neutronEnergy)))*fPath / (299792458) #Speed of light
-    # sqrt((mev/c^2)/mev)*m = m/c = m/(m/s)
-    #print("this is tof", tof)
+    
     #returns a sigma value for an input of the neutron energy where tof is related to the energy as well
     return neutronEnergy * 2 * np.sqrt(((dfPath/fPath)**2) + (((dTof/tof))**2))
 
 
 #Returns a gaussian function with an axis of energy dependance, being centered on a specific energy level
 def gaussian(energy , energyList):
+    
     newGaussian = np.exp((((energy - energyList)**2))/(sigma(energy)**2) / (-2)) / (sigma(energy) * np.sqrt(2 * np.pi)) 
 
+    #delta of the energy list used in the intergral calculation
     steps = np.diff(energyList)
     integral = 0
 
+    #For loop to normalize the gaussian to an area of 1
     for value,step in zip(newGaussian,steps):
-
+        
+        #takes the gaussian and multiplies it by the step size to form a normalization
         integral += step*value
         
+    #returns the gaussian normalized with the area under the gaussian
     return newGaussian / integral
 
 #function that calculates the 2d matrix of all gaussian functions
+# Referance picture 1 in physics photos
 matrixGaussian = []
 for energy in uniformNeutronEnergyList:
     matrixGaussian.append(gaussian(energy, uniformNeutronEnergyList))
