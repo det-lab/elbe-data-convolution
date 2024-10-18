@@ -30,16 +30,27 @@ expereimentPlotPoints = na.convolution_2d_changing_kernel(interpExperimental, ma
 fig, ax = plt.subplots()
 x = neutronEnergyList
 # plots the theory values from the excel doc
-line, = ax.plot(uniformNeutronEnergyList, interpTheory, color = "blue")
+#line, = ax.plot(uniformNeutronEnergyList, interpTheory, color = "blue" , label ="Theory No Convolution", linewidth = 3)
 # plots the theory values convolved with the gaussian matrix
-ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black")
-#plots the interped experimental data
-ax.plot(uniformNeutronEnergyList, interpExperimental, color ="red")
-#plots the experimental data convolved with the gaussian matrix
-ax.plot(uniformNeutronEnergyList, expereimentPlotPoints, color= "green")
 
-ax.plot(azurePlots.azureLabEnergy[1], azurePlots.azureCrossSec[1], color="purple")
+#plots the interped experimental data
+ax.plot(dataP.neutronEnergyList, dataP.expereimentValuesList,"o", color ="red" , label = "Experimental Data")
+
+ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "Python Based Convolution", linewidth = 2)
+
+#plots the experimental data convolved with the gaussian matrix
+#ax.plot(uniformNeutronEnergyList, expereimentPlotPoints, color= "green", label = "Experimental Convolution", linewidth = 2)
+
+ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convoltion", linewidth = 2)
 
 ax.set_yscale('linear')
+
+plt.legend(loc="upper left", fontsize = 24)
+plt.tick_params(axis='both', which='major', labelsize=20)
+plt.xlabel("Lab Frame Energy (MeV)",fontsize = 20)
+plt.ylabel("Yeild (Unit Less)",fontsize = 20)
+plt.xlim(0.3, 0.5)
+
+
 
 plt.show()
