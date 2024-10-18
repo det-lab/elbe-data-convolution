@@ -31,7 +31,7 @@ expereimentValuesList = expereimentValues["Experimental data"].tolist()
 neutronEnergyList = np.array(neutronEnergyList)
 
 #creates a new uniform list of energy values 
-uniformNeutronEnergyList = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 6)
+uniformNeutronEnergyList = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 4)
 
 interpTheory = np.interp(uniformNeutronEnergyList, neutronEnergyList, theoryValuesList)
 interpExperiment = np.interp(uniformNeutronEnergyList, neutronEnergyList, expereimentValuesList)

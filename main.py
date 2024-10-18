@@ -36,12 +36,12 @@ x = neutronEnergyList
 #plots the interped experimental data
 ax.plot(dataP.neutronEnergyList, dataP.expereimentValuesList,"o", color ="red" , label = "Experimental Data")
 
-ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "Python Based Convolution", linewidth = 2)
+ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "Python Based Convolution", linewidth = 2, marker = "x")
 
 #plots the experimental data convolved with the gaussian matrix
 #ax.plot(uniformNeutronEnergyList, expereimentPlotPoints, color= "green", label = "Experimental Convolution", linewidth = 2)
 
-ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convoltion", linewidth = 2)
+ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convoltion", linewidth = 2, marker = "x")
 
 ax.set_yscale('linear')
 
