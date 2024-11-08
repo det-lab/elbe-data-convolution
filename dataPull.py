@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import azureComparePython as azurePlots
 
 #Imports the data from the excel file to make it avaliable for other programs
 
@@ -19,7 +20,6 @@ print("Computating Convolution")
 
 #imports all of the excel data into pandas arrays
 neutronEnergy = pd.read_excel(file_path, usecols="E", header=0)
-print(neutronEnergy)
 theoryValues = pd.read_excel(file_path,usecols="B", header=0)
 expereimentValues = pd.read_excel(file_path,usecols="C", header=0)
 uncertainty = pd.read_excel(file_path,usecols="D", header=0)
@@ -30,11 +30,42 @@ theoryValuesList = theoryValues["Theory function"].tolist()
 expereimentValuesList = expereimentValues["Experimental data"].tolist()
 neutronEnergyList = np.array(neutronEnergyList)
 
-#creates a new uniform list of energy values 
-uniformNeutronEnergyList = np.linspace(neutronEnergyList[0], neutronEnergyList[-1], len(neutronEnergyList) * 4)
+#for loop to reduce range of interp
+def narrowingFunc():
+    startIndex = int
+    endIndex = int
+    for i, values in enumerate(neutronEnergyList):
+        if values >= azurePlots.azureLabEnergy[0]:
+            
+            startIndexNeutron = i
+            break
 
-interpTheory = np.interp(uniformNeutronEnergyList, neutronEnergyList, theoryValuesList)
+    for i, values in enumerate(neutronEnergyList):
+        if values >= azurePlots.azureLabEnergy[-1]:
+            
+            endIndexNeutron = i
+            break
+    
+    neutronEnergyShortend = neutronEnergy[startIndexNeutron:endIndexNeutron]
+    theoryShortend = theoryValuesList[startIndexNeutron:endIndexNeutron]
+
+    return neutronEnergyShortend, theoryShortend
+
+shortenListsArray = list(narrowingFunc())
+
+
+shortenListsArray[0] = np.asarray(shortenListsArray[0]).flatten()
+shortenListsArray[1] = np.asarray(shortenListsArray[1]).flatten()
+
+shortNeutron = shortenListsArray[0]
+
+#creates a new uniform list of energy values 
+uniformNeutronEnergyList = np.linspace(shortNeutron[0],shortNeutron[-1], len(neutronEnergyList) * 2)
+
+#creates interped values from uniform neutron energies
+interpTheory = np.interp(uniformNeutronEnergyList, shortenListsArray[0], shortenListsArray[1])
 interpExperiment = np.interp(uniformNeutronEnergyList, neutronEnergyList, expereimentValuesList)
+print("Here", uniformNeutronEnergyList)
 
 #Function that calculates the diviation for the gaussian function
 def sigma(neutronEnergy):

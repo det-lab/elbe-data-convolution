@@ -22,13 +22,14 @@ interpExperimental = dataP.interpExperiment
 matrixGaussian = dataP.matrixGaussian
 ###
 
+
 #uses the convolv function in newApproach.py to caluculate the points at a specifc index for the 2d gaussian matrix
-theoryPlotPoints = na.convolution_2d_changing_kernel(interpTheory, matrixGaussian, uniformNeutronEnergyList) 
-expereimentPlotPoints = na.convolution_2d_changing_kernel(interpExperimental, matrixGaussian, uniformNeutronEnergyList)
+theoryPlotPoints = na.convolution_2d_changing_kernel(interpTheory, matrixGaussian, uniformNeutronEnergyList)
+
+#expereimentPlotPoints = na.convolution_2d_changing_kernel(interpExperimental, matrixGaussian, uniformNeutronEnergyList)
 
 # Set up the figure, axis, and plot element
 fig, ax = plt.subplots()
-x = neutronEnergyList
 # plots the theory values from the excel doc
 #line, = ax.plot(uniformNeutronEnergyList, interpTheory, color = "blue" , label ="Theory No Convolution", linewidth = 3)
 # plots the theory values convolved with the gaussian matrix

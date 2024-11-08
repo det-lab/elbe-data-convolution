@@ -57,5 +57,4 @@ def convolution_2d_changing_kernel(signal, rawKernel, neutronEnergyList):
         output[i] = np.dot(signal, kernel) * energyStep
         #takes the sum of the padded_signal with its length equal to that of the kernels
     
-    print(output)
     return output
