@@ -38,7 +38,7 @@ def convolution_1d_same(signal, rawKernel, neutronEnergyList):
 #convolution of 2d kernal array and signal
 #{[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]}
 #[2,3,4,2]
-def convolution_2d_changing_kernel(signal, rawKernel, neutronEnergyList):
+def convolution_2d_changing_kernel(signal, matrix2D, neutronEnergyList):
 
      # Initialize the output array
     output_length = len(signal)
@@ -46,15 +46,14 @@ def convolution_2d_changing_kernel(signal, rawKernel, neutronEnergyList):
 
     #Normilization of output, however is much more irrelivent now due to the step amount being constant
     energyStepsList = np.diff(neutronEnergyList)
-    energyStep = energyStepsList[1]
-
+    energyStepsList = np.append(energyStepsList, energyStepsList[-1])
     # Dot product of the signal and kernel, the kernel is already moving along the signal with the 2d raw kernel
-    for i, kernel in enumerate(rawKernel):
+    for i, kernel in enumerate(matrix2D):
         
         #The dot product is somewhat inefficent due to the the number of products of zero, however, using the dotproduct of the indexes
         #of each gaussian results in the gaussian at one energy is dotted with the signal of the gaussian where the correct numbers are
         #being multiplied and sumed properly, then the next guassian is dotted causing the convolution to move accross the signal.
-        output[i] = np.dot(signal, kernel) * energyStep
+        output[i] = np.dot(signal, kernel)*energyStepsList[i]
         #takes the sum of the padded_signal with its length equal to that of the kernels
     
     return output

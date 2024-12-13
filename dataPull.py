@@ -93,22 +93,24 @@ def gaussian(energy , energyList):
     newGaussian = np.exp((((energy - energyList)**2))/(sigma(energy)**2) / (-2)) / (sigma(energy) * np.sqrt(2 * np.pi)) 
 
     #delta of the energy list used in the intergral calculation
-    steps = np.diff(energyList)
+    deltaEnergy = np.diff(energyList)
     integral = 0
 
     #For loop to normalize the gaussian to an area of 1
-    for value,step in zip(newGaussian,steps):
+    for value,dE in zip(newGaussian,deltaEnergy):
         
         #takes the gaussian and multiplies it by the step size to form a normalization
-        integral += step*value
+        integral += dE*value
         
     #returns the gaussian normalized with the area under the gaussian
     return newGaussian / integral
 
 #function that calculates the 2d matrix of all gaussian functions
 # Referance picture 1 in physics photos
-matrixGaussian = []
-for energy in uniformNeutronEnergyList:
-    matrixGaussian.append(gaussian(energy, uniformNeutronEnergyList))
+def matrixGaussianFunc(energylist):
+    matrixGaussian = []
+    for energy in energylist:
+        matrixGaussian.append(gaussian(energy, energylist))
+    matrixGaussian = np.array(matrixGaussian)
+    return matrixGaussian
 
-matrixGaussian = np.array(matrixGaussian)

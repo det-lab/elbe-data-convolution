@@ -18,14 +18,9 @@ gaussian2D = np.array(gaussian2D)
 
 
 signal = np.array([2,6,2,1,1,5,5,2,4,2])
-
-def normalizeGaussian2D(gaussian2D):
-
     
 def plotPoint(sig, gaussian2D):
-
     output = []
-
     for gaussian in gaussian2D:
 
         output.append(np.dot(sig, gaussian))

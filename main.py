@@ -19,8 +19,12 @@ uniformNeutronEnergyList = dataP.uniformNeutronEnergyList
 interpTheory = dataP.interpTheory
 interpExperimental = dataP.interpExperiment
 #imports the 2d Gaussian matrix from dataPull.py
-matrixGaussian = dataP.matrixGaussian
+matrixGaussian = dataP.matrixGaussianFunc(uniformNeutronEnergyList)
 ###
+
+testMatrix = dataP.matrixGaussianFunc(neutronEnergyList)
+
+testTheory = na.convolution_2d_changing_kernel(theoryValuesList, testMatrix, neutronEnergyList)
 
 
 #uses the convolv function in newApproach.py to caluculate the points at a specifc index for the 2d gaussian matrix
@@ -44,14 +48,15 @@ ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "P
 
 ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convoltion", linewidth = 2, marker = "x")
 
-ax.set_yscale('linear')
+ax.plot(neutronEnergyList, testTheory, color = "blue", label="Test Plot")
+
+ax.set_yscale('log')
 
 plt.legend(loc="upper left", fontsize = 24)
 plt.tick_params(axis='both', which='major', labelsize=20)
 plt.xlabel("Lab Frame Energy (MeV)",fontsize = 20)
 plt.ylabel("Yeild (Unit Less)",fontsize = 20)
 plt.xlim(0.3, 0.5)
-
 
 
 plt.show()
