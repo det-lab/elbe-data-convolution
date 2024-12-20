@@ -93,6 +93,7 @@ def gaussian(energy , energyList):
     newGaussian = np.exp((((energy - energyList)**2))/(sigma(energy)**2) / (-2)) / (sigma(energy) * np.sqrt(2 * np.pi)) 
 
     #delta of the energy list used in the intergral calculation
+    #note that the energy list in the data is not uniform
     deltaEnergy = np.diff(energyList)
     integral = 0
 

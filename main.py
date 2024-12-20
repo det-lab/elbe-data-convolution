@@ -48,7 +48,11 @@ ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "P
 
 ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convoltion", linewidth = 2, marker = "x")
 
+#plots the theory values without interp and convolved with energy dependance
 ax.plot(neutronEnergyList, testTheory, color = "blue", label="Test Plot")
+
+#Plots the theory values without a convolution
+ax.plot(neutronEnergyList, theoryValuesList, color="purple", label="Theory/No Convolution")
 
 ax.set_yscale('log')
 
@@ -57,6 +61,5 @@ plt.tick_params(axis='both', which='major', labelsize=20)
 plt.xlabel("Lab Frame Energy (MeV)",fontsize = 20)
 plt.ylabel("Yield (Unit Less)",fontsize = 20)
 plt.xlim(0.3, 0.5)
-
 
 plt.show()
