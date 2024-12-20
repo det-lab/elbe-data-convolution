@@ -55,7 +55,7 @@ ax.set_yscale('log')
 plt.legend(loc="upper left", fontsize = 24)
 plt.tick_params(axis='both', which='major', labelsize=20)
 plt.xlabel("Lab Frame Energy (MeV)",fontsize = 20)
-plt.ylabel("Yeild (Unit Less)",fontsize = 20)
+plt.ylabel("Yield (Unit Less)",fontsize = 20)
 plt.xlim(0.3, 0.5)
 
 
