@@ -56,6 +56,7 @@ ax.plot(neutronEnergyList, theoryValuesList, color="purple", label="Theory/No Co
 
 ax.set_yscale('log')
 
+#Plot formating
 plt.legend(loc="upper left", fontsize = 24)
 plt.tick_params(axis='both', which='major', labelsize=20)
 plt.xlabel("Lab Frame Energy (MeV)",fontsize = 20)
