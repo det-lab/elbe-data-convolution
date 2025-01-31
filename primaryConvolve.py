@@ -54,3 +54,47 @@ def convolution_2d_changing_kernel(signal, matrix2D, neutronEnergyList):
         output[i] = np.sum(signal * kernel * energyStepsList)
     
     return output
+
+def convolution_1and2D(signal, kernel, axis):
+    
+    sortArry = kernel.ndim
+
+    deltaAxis = np.diff(axis)
+    deltaAxis = deltaAxis[1]
+
+    if sortArry == 1:
+
+        np.flip(kernel)
+        pad_left = len(kernel)//2
+        pad_right = len(kernel)//2
+
+        signal = np.pad(signal, (pad_left, pad_right), 'constant')
+
+        output_length = len(kernel)
+        output = np.zeros(output_length)
+
+        for i in range(output_length):
+            print(i, "to", i + len(kernel))
+            if len(signal[i:i + len(kernel)]) == len(kernel):
+                output[i] = np.sum(signal[i:i + len(kernel)] * kernel ) * deltaAxis
+            else:
+                output[i] = 0
+                print("Artifical 0 created at index", i, "due to improper array length")
+        return output
+    
+    elif sortArry == 2:
+
+        np.flip(kernel)
+        pad_left = len(kernel) 
+        pad_right = len(kernel) 
+
+        signal = np.pad(signal, (pad_left, pad_right), 'constant')
+
+        output_length = len(signal)
+        output = np.zeros(output_length)
+
+        for i in range(output_length):
+
+            output[i] = np.sum(signal[i:i + len(kernel)] * kernel[i] ) * deltaAxis
+
+        return output

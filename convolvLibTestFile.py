@@ -65,25 +65,39 @@ def convolutionTest2(convolutionFunc):
 
     #introduce analitical solution from notes
 
-    return axis, convolutionFunc(TriangleFunc(axis), squareFunc(axis), axis), TriangleFunc(axis), squareFunc(axis), axis
+    def analyilticlSolution(axis):
+        output = np.zeros(len(axis))
+
+        for i, x in enumerate(axis):
+            if x < 0:
+                output[i] = 0
+            elif x >= 0 and x < 2:
+                output[i] = (5/2)* (x**2)
+            elif x == 2:
+                output[i] = 10
+            elif x > 2 and x < 4:
+                output[i] = (10 * x -10) - (5*x*(x-2)-(5/2)*(x-2)**2)
+            elif x >= 4:
+                output[i] = 0
+            else:
+                print("Something broke")
+
+    return analyilticlSolution(axis), convolutionFunc(TriangleFunc(axis), squareFunc(axis), axis), TriangleFunc(axis), squareFunc(axis), axis
 
 def convolutionTest3(convolutionFunc):
     
     #make the axis non uniform stepping size
-    def generate_random_steps_array(start, end):
-        arr = [start]
-        while arr[-1] < end:
-            step = random.uniform(0.01, 0.05)  # Adjust step range as needed
-            next_val = arr[-1] + step
-            if next_val > end:
-                break
-            arr.append(next_val)
-        return arr
+    def changeingStep():
+        xAxis = np.linspace(-10,10,100)
+        finalX = []
+        for i, x in enumerate(xAxis):
+            finalX.append(x * i)
+        return finalX
 
-    axis = generate_random_steps_array(-10,10)
+    axis = changeingStep()
 
     axis = np.array(axis)
-
+    print(np.diff(axis))
     arbitarySigma = 2
 
     trueAnalitical = 1/(np.sqrt(2*np.pi* (arbitarySigma**2 + arbitarySigma**2))) * np.exp(-(axis**2)/(2*(arbitarySigma**2 + arbitarySigma**2)))
@@ -98,7 +112,7 @@ def plotConvolutionTest(testFunc, convolutionFunc):
     
     trueCon, testCon, kernal, signal, axis = testFunc(convolutionFunc)
     print(np.dot(kernal, signal) * np.diff(axis)[0])
-    plt.plot(axis, trueCon, label= "True Con", color = "blue")
+    plt.plot(axis, trueCon, label= "True Con", color = "blue", )
     plt.plot(axis, testCon, label= "Test Con", color = "red")
     plt.plot(axis, kernal, label= "Kernel Func", color = "yellow")
     plt.plot(axis, signal, label= "Signal Func", color = "purple")
@@ -108,7 +122,7 @@ def plotConvolutionTest(testFunc, convolutionFunc):
 
     plt.show()
     
-plotConvolutionTest(convolutionTest3, pc.convolution_1d_same)
+plotConvolutionTest(convolutionTest2, pc.convolution_1and2D)
 
 
 
