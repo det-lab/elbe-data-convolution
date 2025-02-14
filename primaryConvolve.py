@@ -63,9 +63,22 @@ def convolution_1and2D(signal, kernel, axis):
     deltaAxis = deltaAxis[1]
 
     if sortArry == 1:
+        
+        axisIndex = len(axis)//2
+
+        for i, array in enumerate(kernel[axisIndex:-1]):
+            if array != 0:
+                if array == 0:
+                    leftOffset_Padding = (kernel[axisIndex + i - 1] // 2) * 10
+                    break
+            elif array == 0:
+                leftOffset_Padding = 0
+                break
+        
+
 
         np.flip(kernel)
-        pad_left = len(kernel)//2
+        pad_left = leftOffset_Padding + len(kernel)//2
         pad_right = len(kernel)//2
 
         signal = np.pad(signal, (pad_left, pad_right), 'constant')

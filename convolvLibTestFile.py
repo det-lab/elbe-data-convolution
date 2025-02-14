@@ -61,7 +61,7 @@ def convolutionTest2(convolutionFunc):
         return np.where((arr >= 0) & (arr <= 2), arr, 0)
     
     def squareFunc(arr):
-        return np.where((arr >= 0) & (arr <= 2), 5, 0)
+        return np.where((arr >= -2) & (arr <= 0), 5, 0)
 
     #introduce analitical solution from notes
 
@@ -81,6 +81,7 @@ def convolutionTest2(convolutionFunc):
                 output[i] = 0
             else:
                 print("Something broke")
+        return output
 
     return analyilticlSolution(axis), convolutionFunc(TriangleFunc(axis), squareFunc(axis), axis), TriangleFunc(axis), squareFunc(axis), axis
 
@@ -114,9 +115,9 @@ def plotConvolutionTest(testFunc, convolutionFunc):
     print(np.dot(kernal, signal) * np.diff(axis)[0])
     plt.plot(axis, trueCon, label= "True Con", color = "blue", )
     plt.plot(axis, testCon, label= "Test Con", color = "red")
-    plt.plot(axis, kernal, label= "Kernel Func", color = "yellow")
-    plt.plot(axis, signal, label= "Signal Func", color = "purple")
-    plt.plot(axis, np.convolve(kernal, signal, mode= "same") * np.diff(axis)[0])
+    #plt.plot(axis, kernal, label= "Kernel Func", color = "yellow")
+    #plt.plot(axis, signal, label= "Signal Func", color = "purple")
+    #plt.plot(axis, np.convolve(kernal, signal, mode= "same") * np.diff(axis)[0])
 
     plt.legend(loc="upper left", fontsize = 24)
 
