@@ -4,6 +4,7 @@ import dataPull
 import primaryConvolve as pc
 import matplotlib.pyplot as plt
 import random
+import stackOverflowTestFile as stackTest
 
 axis = dataPull.neutronEnergyList
 dataSet = dataPull.theoryValuesList
@@ -55,13 +56,13 @@ def convolutionTest1(convolutionFunc):
     return trueAnalitical, convolutionFunc(fFunction, gFunction, axis), fFunction, gFunction, axis
     
 def convolutionTest2(convolutionFunc):
-    axis = np.linspace(-10,10, 200)
-
+    axis = np.linspace(-10,10, 8001)
+    print(axis)
     def TriangleFunc(arr):
         return np.where((arr >= 0) & (arr <= 2), arr, 0)
     
     def squareFunc(arr):
-        return np.where((arr >= -2) & (arr <= 0), 5, 0)
+        return np.where((arr >= 0) & (arr <= 2), 5, 0)
 
     #introduce analitical solution from notes
 
@@ -71,10 +72,9 @@ def convolutionTest2(convolutionFunc):
         for i, x in enumerate(axis):
             if x < 0:
                 output[i] = 0
-            elif x >= 0 and x < 2:
+            elif x >= 0 and x <= 2:
                 output[i] = (5/2)* (x**2)
-            elif x == 2:
-                output[i] = 10
+            
             elif x > 2 and x < 4:
                 output[i] = (10 * x -10) - (5*x*(x-2)-(5/2)*(x-2)**2)
             elif x >= 4:
@@ -112,12 +112,13 @@ def convolutionTest3(convolutionFunc):
 def plotConvolutionTest(testFunc, convolutionFunc):
     
     trueCon, testCon, kernal, signal, axis = testFunc(convolutionFunc)
-    print(np.dot(kernal, signal) * np.diff(axis)[0])
+
     plt.plot(axis, trueCon, label= "True Con", color = "blue", )
     plt.plot(axis, testCon, label= "Test Con", color = "red")
-    #plt.plot(axis, kernal, label= "Kernel Func", color = "yellow")
-    #plt.plot(axis, signal, label= "Signal Func", color = "purple")
-    #plt.plot(axis, np.convolve(kernal, signal, mode= "same") * np.diff(axis)[0])
+    plt.plot(axis, kernal, label= "Kernel Func", color = "yellow")
+    plt.plot(axis, signal, label= "Signal Func", color = "purple")
+    plt.plot(axis, np.convolve(kernal, signal, mode= "same") * np.diff(axis)[0], label="Numpy")
+    plt.plot(axis, stackTest.convolve_1d_same(signal, kernal) * np.diff(axis)[0], label="Stack Conv")
 
     plt.legend(loc="upper left", fontsize = 24)
 
