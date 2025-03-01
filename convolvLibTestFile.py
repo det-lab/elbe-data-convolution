@@ -118,7 +118,7 @@ def plotConvolutionTest(testFunc, convolutionFunc):
     plt.plot(axis, kernal, label= "Kernel Func", color = "yellow")
     plt.plot(axis, signal, label= "Signal Func", color = "purple")
     plt.plot(axis, np.convolve(kernal, signal, mode= "same") * np.diff(axis)[0], label="Numpy")
-    plt.plot(axis, stackTest.convolve_1d_same(signal, kernal) * np.diff(axis)[0], label="Stack Conv")
+    #plt.plot(axis, stackTest.convolve_1d_same(signal, kernal) * np.diff(axis)[0], label="Stack Conv")
 
     plt.legend(loc="upper left", fontsize = 24)
 

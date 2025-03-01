@@ -16,7 +16,7 @@ file_path = os.path.join(folder, filename)
 # Print the path
 
 print("reading file... " + file_path)
-print("Computating Convolution")
+
 
 #imports all of the excel data into pandas arrays
 neutronEnergy = pd.read_excel(file_path, usecols="E", header=0)
@@ -60,12 +60,14 @@ shortenListsArray[1] = np.asarray(shortenListsArray[1]).flatten()
 shortNeutron = shortenListsArray[0]
 
 #creates a new uniform list of energy values 
-uniformNeutronEnergyList = np.linspace(shortNeutron[0],shortNeutron[-1], len(neutronEnergyList) * 2)
+shortUniformNeutronEnergyList = np.linspace(shortNeutron[0],shortNeutron[-1], len(neutronEnergyList) * 2)
+
+#Ensures a uniform energy list, required by a 2d convolve
+uniformNeutronEnergyList = np.linspace(neutronEnergyList[0],neutronEnergyList[-1],len(neutronEnergyList * 2)) 
 
 #creates interped values from uniform neutron energies
-interpTheory = np.interp(uniformNeutronEnergyList, shortenListsArray[0], shortenListsArray[1])
-interpExperiment = np.interp(uniformNeutronEnergyList, neutronEnergyList, expereimentValuesList)
-print("Here", uniformNeutronEnergyList)
+interpTheory = np.interp(shortUniformNeutronEnergyList, shortenListsArray[0], shortenListsArray[1])
+interpExperiment = np.interp(shortUniformNeutronEnergyList, neutronEnergyList, expereimentValuesList)
 
 #Function that calculates the diviation for the gaussian function
 def sigma(neutronEnergy):
@@ -103,6 +105,8 @@ def gaussian(energy , energyList):
         #takes the gaussian and multiplies it by the step size to form a normalization
         integral += dE*value
         
+    if integral == 0:
+        print("zero at", energy, energyList)
     #returns the gaussian normalized with the area under the gaussian
     return newGaussian / integral
 

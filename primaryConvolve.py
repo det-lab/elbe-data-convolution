@@ -55,53 +55,88 @@ def convolution_2d_changing_kernel(signal, matrix2D, neutronEnergyList):
     
     return output
 
-def convolution_1and2D(signal, kernel, axis):
+def convolution_1and2D(signal, kernel, axis, inputFunc,mode):
     
     sortArry = kernel.ndim
 
-    deltaAxis = np.diff(axis)
-    deltaAxis = deltaAxis[1]
-
     if sortArry == 1:
-        
-        axisIndex = len(axis)//2
+        kernel = kernel[::-1]  # Reverse kernel for convolution
+        output = []
 
-        for i, array in enumerate(kernel[axisIndex:-1]):
-            if array == 0 and i != 0:
-               leftOffset_Padding = (kernel[axisIndex + i - 1] // 2) * 10
-               break
-            elif array == 0 and i == 0:
-                leftOffset_Padding = 0
-        
-        #for i, array in enumerate(np.flip(kernel[0:axisIndex])):
-        #    if array != 0:
-        #        if array == 0:
-        #            rightOffset_Padding = (kernel[axisIndex + i - 1] // 2) * 10
-        #            break
-        #    elif array == 0:
-        #        rightOffset_Padding = 0
-        #        break
-        
-        np.flip(kernel)
-        pad_left = len(kernel)//2 
-        pad_right = len(kernel)//2
+        for i in range(1 - len(kernel), len(signal)):  # Slide kernel across signal
 
-        signal = np.pad(signal, (pad_left, pad_right), 'constant')
+            start = max(0, i)
+            # max(0, -3)
+            end = min(i + len(kernel), len(signal))
+            # min(-3 + 4, 5)
+            kernel_start = max(-i, 0)
+            # max(3, 0)
+            kernel_end = kernel_start + (end - start)
+            # 3 + (1 - 0) = 4
 
-        output_length = len(kernel)
-        output = np.zeros(output_length)
+            conv_result = np.dot(signal[start:end], kernel[kernel_start:kernel_end])
+            # signal[0:1], kernel[3:4]
+            # signal[0:2], kernel[2:4]
+            output.append(conv_result) #appends the full convolution
 
-        for i in range(output_length):
-            print(i, "to", i + len(kernel))
-            if len(signal[i:i + len(kernel)]) == len(kernel):
-                output[i] = np.sum(signal[i:i + len(kernel)] * kernel ) * deltaAxis
-            else:
-                output[i] = 0
-                print("Artifical 0 created at index", i, "due to improper array length")
-        return output
+        #### Convolution has already been done, just formating below ####
+
+        if mode == "same": #if same is passed into function, the "full" convolution is then cut down to be same dim as the signal array
+            sliceIndex = (len(kernel) - 1)//2 # How much to slice off the ends of the output is based on the length of the kernel
+
+            if len(kernel) % 2 == 0:
+                output = output[sliceIndex:-(sliceIndex+1)] # To follow python, cutting one extra during an even sized kernel
+                print("kernel is Even")
+            else: 
+                output = output[sliceIndex:-(sliceIndex)] # If odd, nother special is need in slicing
+                print("Kernel is Odd")
+            return output
+        else: return output
+
     
     elif sortArry == 2:
 
+        output = []
+        
+
+        #for indivKernel in kernel:
+        #    indivKernel = [num for num in indivKernel if num != 0] #strips zeros from the function
+        
+
+
+        for i in range(1 - len(kernel), len(signal)):  # Slide kernel across signal
+            
+            start = max(0, i)
+            # max(0, -3)
+            end = min(i + len(kernel), len(signal))
+            # min(-3 + 4, 5)
+            kernel_start = max(-i, 0)
+            # max(3, 0)
+            kernel_end = kernel_start + (end - start)
+            # 3 + (1 - 0) = 4
+            
+            conv_result = np.dot(signal[start:end], kernel[start][kernel_start:kernel_end])
+            # signal[0:1], kernel[3:4]
+            # signal[0:2], kernel[2:4]
+            
+            output.append(conv_result) #appends the full convolution
+
+        #### Convolution has already been done, just formating below ####
+
+        if mode == "same": #if same is passed into function, the "full" convolution is then cut down to be same dim as the signal array
+            sliceIndex = (len(kernel) - 1)//2 # How much to slice off the ends of the output is based on the length of the kernel
+
+            if len(kernel) % 2 == 0:
+                output = output[sliceIndex:-(sliceIndex+1)] # To follow python, cutting one extra during an even sized kernel
+                print("kernel is Even")
+            else: 
+                output = output[sliceIndex:-(sliceIndex)] # If odd, nother special is need in slicing
+                print("Kernel is Odd")
+            return output
+        else: return output
+
+
+        """
         np.flip(kernel)
         pad_left = len(kernel) 
         pad_right = len(kernel) 
@@ -116,3 +151,4 @@ def convolution_1and2D(signal, kernel, axis):
             output[i] = np.sum(signal[i:i + len(kernel)] * kernel[i] ) * deltaAxis
 
         return output
+        """
