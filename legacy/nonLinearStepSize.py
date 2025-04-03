@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib as plt
 import convolFunc as cf
 import gaussianAnim as ga
-import primaryConvolve as na
+import DepConvLib.primaryConvolve as na
 import legacy.gaussian as gauss
 
 

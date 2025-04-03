@@ -1,7 +1,7 @@
 import numpy as np
 import convolvLib as cl
 import dataPull
-import primaryConvolve as pc
+import DepConvLib.primaryConvolve as pc
 import matplotlib.pyplot as plt
 import random
 import stackOverflowTestFile as stackTest

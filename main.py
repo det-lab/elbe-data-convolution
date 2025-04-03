@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import dataPull as dataP
-import primaryConvolve as na
+import DepConvLib.primaryConvolve as na
 import azureComparePython as azurePlots
 
 

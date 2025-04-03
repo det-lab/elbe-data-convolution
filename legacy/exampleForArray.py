@@ -1,5 +1,5 @@
 import numpy as np
-import primaryConvolve as na
+import DepConvLib.primaryConvolve as na
 
 amatrix = []
 

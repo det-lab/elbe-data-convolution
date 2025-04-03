@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import dataPull as dataP
-import primaryConvolve as na
+import DepConvLib.primaryConvolve as na
 
 #this program is usefull for conceptualizing how the gaussian is changing with energy
 #keep in mind the values that are greater than zero are used in the convolution with the theory data

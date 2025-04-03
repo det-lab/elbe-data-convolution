@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 import azureComparePython as azurePlots
+import scipy as sp
 
 #Imports the data from the excel file to make it avaliable for other programs
 
@@ -109,6 +110,17 @@ def gaussian(energy , energyList):
         print("zero at", energy, energyList)
     #returns the gaussian normalized with the area under the gaussian
     return newGaussian / integral
+
+def gaussianVarMod(sigma):
+    
+    size_grid = int(sigma*4)
+	
+    energy= np.mgrid[-size_grid:size_grid+1]
+
+    newGaussian = np.exp((((energy)**2))/(sigma**2) / (-2)) / (sigma * np.sqrt(2 * np.pi)) 
+
+    #returns the gaussian normalized with the area under the gaussian
+    return newGaussian / np.sum(newGaussian)
 
 #function that calculates the 2d matrix of all gaussian functions
 # Referance picture 1 in physics photos
