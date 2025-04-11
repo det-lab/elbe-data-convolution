@@ -19,7 +19,7 @@ uniformNeutronEnergyList = dataP.uniformNeutronEnergyList
 interpTheory = dataP.interpTheory
 interpExperimental = dataP.interpExperiment
 #imports the 2d Gaussian matrix from dataPull.py
-matrixGaussian = dataP.matrixGaussianFunc(uniformNeutronEnergyList)
+matrixGaussian = dataP.matrixGaussianFunc(dataP.shortUniformNeutronEnergyList)
 ###
 
 testMatrix = dataP.matrixGaussianFunc(neutronEnergyList)
@@ -28,7 +28,7 @@ testTheory = na.convolution_2d_changing_kernel(theoryValuesList, testMatrix, neu
 
 
 #uses the convolv function in newApproach.py to caluculate the points at a specifc index for the 2d gaussian matrix
-theoryPlotPoints = na.convolution_2d_changing_kernel(interpTheory, matrixGaussian, uniformNeutronEnergyList)
+#theoryPlotPoints = na.convolution_2d_changing_kernel(theoryValuesList, matrixGaussian, uniformNeutronEnergyList)
 
 #expereimentPlotPoints = na.convolution_2d_changing_kernel(interpExperimental, matrixGaussian, uniformNeutronEnergyList)
 
@@ -41,15 +41,15 @@ fig, ax = plt.subplots()
 #plots the interped experimental data
 ax.plot(dataP.neutronEnergyList, dataP.expereimentValuesList,"o", color ="red" , label = "Experimental Data")
 
-ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "Python Based Convolution", linewidth = 2, marker = "x")
+#ax.plot(uniformNeutronEnergyList, theoryPlotPoints, color = "black" , label = "Python Based Convolution", linewidth = 2, marker = "x")
 
 #plots the experimental data convolved with the gaussian matrix
 #ax.plot(uniformNeutronEnergyList, expereimentPlotPoints, color= "green", label = "Experimental Convolution", linewidth = 2)
 
-ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convoltion", linewidth = 2, marker = "x")
+ax.plot(azurePlots.azureLabEnergy, azurePlots.azureCrossSec[3], color="green", label = "Azure Based Convolution", linewidth = 2, marker = "x")
 
 #plots the theory values without interp and convolved with energy dependance
-ax.plot(neutronEnergyList, testTheory, color = "blue", label="Test Plot")
+ax.plot(neutronEnergyList, testTheory, color = "blue", label="Python Convolution Theory")
 
 #Plots the theory values without a convolution
 ax.plot(neutronEnergyList, theoryValuesList, color="purple", label="Theory/No Convolution")
