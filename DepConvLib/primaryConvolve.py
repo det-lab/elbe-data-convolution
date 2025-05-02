@@ -38,7 +38,37 @@ def convolution_1d_same(signal, rawKernel, neutronEnergyList):
 #convolution of 2d kernal array and signal
 #{[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]}
 #[2,3,4,2]
-def convolution_2d_changing_kernel(signal, matrix2D, neutronEnergyList):
+
+def convolution_2d_changing_kernel(signal, kernel, axis, argNum):
+
+    if argNum == 2:
+        kernelMatrix = []
+        for x in axis:
+            kernelMatrix.append(kernel(x-axis,x))
+        kernelMatrix = np.array(kernelMatrix)
+
+    if argNum == 1:
+        kernelMatrix = []
+        for x in axis:
+            kernelMatrix.append(kernel(x-axis))
+        kernelMatrix = np.array(kernelMatrix)
+    
+     # Initialize the output array
+    output_length = len(signal)
+    output = np.zeros(output_length)
+
+    #Normilization of output, however is much more irrelivent now due to the step amount being constant
+    stepList = np.diff(axis)
+    step = np.append(stepList, stepList[-1])
+    # Dot product of the signal and kernel, the kernel is already moving along the signal with the 2d raw kernel
+    for i, kernel in enumerate(kernelMatrix):
+        
+        #sums the the 1d arrays to return a single value to then be appended to the convolved array output
+        output[i] = np.sum(signal * kernel * step)
+
+    return output
+"""
+def convolution_2d_changing_kernel(signal, matrix2D, axis):
 
      # Initialize the output array
     output_length = len(signal)
@@ -54,7 +84,7 @@ def convolution_2d_changing_kernel(signal, matrix2D, neutronEnergyList):
         output[i] = np.sum(signal * kernel * energyStepsList)
     
     return output
-
+"""
 def convolution_1and2D(signal, kernel,mode):
     
     sortArry = kernel.ndim
@@ -99,11 +129,8 @@ def convolution_1and2D(signal, kernel,mode):
         print("Performing 2D Convolve")
         output = []
         
-
         #for indivKernel in kernel:
         #    indivKernel = [num for num in indivKernel if num != 0] #strips zeros from the function
-        
-
 
         for i in range(1 - len(kernel), len(signal)):  # Slide kernel across signal
             
