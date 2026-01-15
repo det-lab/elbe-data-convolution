@@ -44,13 +44,13 @@ def convolution_2d_changing_kernel(signal, kernel, axis, argNum):
     if argNum == 2:
         kernelMatrix = []
         for x in axis:
-            kernelMatrix.append(kernel(x-axis,x))
+            kernelMatrix.append(kernel(axis,x))
         kernelMatrix = np.array(kernelMatrix)
 
     if argNum == 1:
         kernelMatrix = []
         for x in axis:
-            kernelMatrix.append(kernel(x-axis))
+            kernelMatrix.append(kernel(axis))
         kernelMatrix = np.array(kernelMatrix)
     
      # Initialize the output array

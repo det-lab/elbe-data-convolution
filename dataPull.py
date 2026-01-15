@@ -89,26 +89,47 @@ def sigma(neutronEnergy):
     #returns a sigma value for an input of the neutron energy where tof is related to the energy as well
     return neutronEnergy * 2 * np.sqrt(((dfPath/fPath)**2) + (((dTof/tof))**2))
 
-
+import matplotlib.pyplot as plt
 #Returns a gaussian function with an axis of energy dependance, being centered on a specific energy level
-def gaussian(energy , energyList):
+def gaussian(energyList , energy):
+    #print(energyList, energy)
+    #test = (np.exp((((energy - energyList)**2))/(sigma(energy)**2)) / (sigma(energy) * np.sqrt(2 * np.pi)) )  
+    #newGaussian = np.exp((((energy - energyList)**2))/(sigma(energy)**2) / (-2)) / (sigma(energy) * np.sqrt(2 * np.pi)) 
     
-    newGaussian = np.exp((((energy - energyList)**2))/(sigma(energy)**2) / (-2)) / (sigma(energy) * np.sqrt(2 * np.pi)) 
 
-    #delta of the energy list used in the intergral calculation
-    #note that the energy list in the data is not uniform
+    newGaussian = np.exp(( -1 * (energy - energyList)**2 ) / ( 2 * (sigma(energy))**2 )) / (sigma(energy) * np.sqrt(2 * np.pi))
+    #print((-1 * (energy + energyList)**2 ) / ( 2 * (sigma(energy))**2))
+    
+    #plt.plot(energyList, (sigma(energyList) * np.sqrt(2 * np.pi)), color="green" )
+    #plt.plot(energyList, (-1 * (energy + energyList)**2 ) / ( 2 * (sigma(energy))**2 ), color="red")
+    #plt.plot(energyList, newGaussian)
+    #plt.yscale("linear")
+    #plt.show()
+
+    #for p in newGaussian:
+    #    if p != 0:
+    #        print(p)
+    ##delta of the energy list used in the intergral calculation
+    ##note that the energy list in the data is not uniform
     deltaEnergy = np.diff(energyList)
     integral = 0
+#
+    #for gauss, dE in zip(newGaussian, deltaEnergy):
+    #    if gauss == 0:
+    #        raise RuntimeError("Guass value is zero")
+    #    elif dE ==0:
+    #        raise RuntimeError("dE is zero")
 
     #For loop to normalize the gaussian to an area of 1
     for value,dE in zip(newGaussian,deltaEnergy):
-        
         #takes the gaussian and multiplies it by the step size to form a normalization
         integral += dE*value
         
     if integral == 0:
         print("zero at", energy, energyList)
     #returns the gaussian normalized with the area under the gaussian
+    #if sum(newGaussian) != 0:
+    #    print(newGaussian)
     return newGaussian / integral
 
 def gaussianVarMod(sigma):

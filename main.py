@@ -18,13 +18,15 @@ neutronEnergyList = np.array(neutronEnergyList)
 uniformNeutronEnergyList = dataP.uniformNeutronEnergyList
 interpTheory = dataP.interpTheory
 interpExperimental = dataP.interpExperiment
+
 #imports the 2d Gaussian matrix from dataPull.py
-matrixGaussian = dataP.matrixGaussianFunc(dataP.shortUniformNeutronEnergyList)
+
+#matrixGaussian = dataP.matrixGaussianFunc(dataP.shortUniformNeutronEnergyList)
 ###
 
-testMatrix = dataP.matrixGaussianFunc(neutronEnergyList)
+#testMatrix = dataP.matrixGaussianFunc(neutronEnergyList)
 
-testTheory = na.convolution_2d_changing_kernel(theoryValuesList, testMatrix, neutronEnergyList)
+testTheory = na.convolution_2d_changing_kernel(theoryValuesList, dataP.gaussian, uniformNeutronEnergyList, 2)
 
 
 #uses the convolv function in newApproach.py to caluculate the points at a specifc index for the 2d gaussian matrix

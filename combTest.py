@@ -3,7 +3,7 @@ import DepConvLib.primaryConvolve as na
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import dataPull as dataP
-import varConvolveGit as varGit
+import DepConvLib.varConvolveGit as varGit
 
 fig = plt.figure(layout="constrained")
 
